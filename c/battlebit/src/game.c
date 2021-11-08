@@ -88,7 +88,6 @@ int game_load_board(struct game *game, int player, char * spec) {
 
     if(spec == NULL){return -1;}
     int x = strlen(spec);
-    printf("%i", x);
     if(strlen(spec) != 15){return -1;}
 
     char *cur = spec;
