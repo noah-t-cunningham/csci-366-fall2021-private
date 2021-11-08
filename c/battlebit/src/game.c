@@ -82,55 +82,47 @@ int game_load_board(struct game *game, int player, char * spec) {
     //
     // if it is invalid, you should return -1
 
+    /*create char lists to check if ship is valid */
     char seen_ship[6]= {'z','z','z','z','z','\0'};
     char valid_ship[11] = {'c', 'C', 'b', 'B', 'd', 'D', 's', 'S', 'p', 'P', '\0'};
+    /*get player info*/
     player_info *playerInfo = &game->players[player];
-
+    /*check if spec is null*/
     if(spec == NULL){return -1;}
-    int x = strlen(spec);
+    /*check if spec is correct length */
     if(strlen(spec) != 15){return -1;}
-
+    /*set cur to spec*/
     char *cur = spec;
-
+    /*for loop that itertas through spec*/
     for( int i = 0; i < 5; i++) {
+        /*gets the ship from spec*/
         char ship = *(cur + (i * 3));
-        
-        //checks if valid ship, if it is add it to seen_ship
-        //int x = strspn(ship, valid_ship);
-        //printf("%i", x);
-//        if(strchr(ship, valid_ship) == NULL){
-//            return -1;
-//        }
-//        if (strspn(toupper(ship), seen_ship) == NULL) {
-//            seen_ship[i] = toupper(ship);
-//        }
-//        else{return -1;}
+        /* checks if ship is a valid ship*/
         int ship_check = 0;
         for(int j = 0; j < valid_ship[j] != '\0'; j++){
             if (valid_ship[j]== ship){ship_check++;}
         }
         if (ship_check != 1){return -1;}
-
+        /* checks if ship has already been placed*/
         for(int q = 0; q < seen_ship[q] != '\0'; q++){
             if (toupper(ship) == seen_ship[q]){ return -1;}
-            //else{seen_ship[i] = toupper(ship);}
         }
         seen_ship[i] = toupper(ship);
 
-        //gets cordinates
+        /*gets cordinates*/
         char x_cord = *(cur + ((i*3) + 1));
         char y_cord = *(cur + ((i*3) + 2));
-        //convert cord to ints
+        /*convert cord to ints*/
         int int_x_cord = x_cord - '0';
         int int_y_cord = y_cord - '0';
-        //set   length
+        /*sets length*/
         int length;
         if(ship == 'C' || ship == 'c'){length = 5;}
         if(ship == 'B' || ship == 'b'){length = 4;}
         if(ship == 'D' || ship == 'd'){length = 3;}
         if(ship == 'S' || ship == 's'){length = 3;}
         if(ship == 'P' || ship == 'p'){length = 2;}
-        //call add ship
+        /*call add ship fuunctions*/
         if (ship >= 'A' && ship <= 'Z'){
             int ash_int = add_ship_horizontal(playerInfo, int_x_cord, int_y_cord, length);
             if (ash_int == -1){return -1;}
@@ -141,7 +133,6 @@ int game_load_board(struct game *game, int player, char * spec) {
         }
     }
 
-    //Game->players[player].ships;
     return 1;
 }
 
@@ -150,28 +141,28 @@ int add_ship_horizontal(player_info *player, int x, int y, int length) {
     // returns 1 if the ship can be added, -1 if not
     // hint: this can be defined recursively
 
-    // if lengths 0 you dont need to add anymore values
+    /* lengths 0 you dont need to add anymore values*/
     if (length == 0){return 1;}
 
-    //check if x, y are on the board
+    /*check if x, y are on the board*/
     if(x < 0 || x > 7){
         return -1;
     }
     if(y < 0 || y > 7){
         return -1;
     }
-    //check if ship already at x, y
+    /*check if ship already at x, y*/
     unsigned long long int mask = xy_to_bitval(x,y);
     unsigned long long int location = player->ships;
     if(mask & player->ships){
         return -1;
     }
 
-    //flip players ship bit to 1
+    /*flip players ship bit to 1*/
     player->ships = player->ships | mask;
 
-    //recusrivley call add_ship_horizontal(manipulate x and y , decrease length by 1)
-    //base case is when length = 0
+    /*recusrivley calls add_ship_horizontal(manipulate x and y , decrease length by 1)
+    base case is when length = 0*/
     add_ship_horizontal(player, x+1, y, length-1);
 }
 
@@ -180,27 +171,27 @@ int add_ship_vertical(player_info *player, int x, int y, int length) {
     // returns 1 if the ship can be added, -1 if not
     // hint: this can be defined recursively
 
-    // if lengths 0 you dont need to add anymore values
+    /* lengths 0 you dont need to add anymore values*/
     if (length == 0){return 1;}
 
-    //check if x, y are on the board
+    /*check if x, y are on the board*/
     if(x < 0 || x > 7){
         return -1;
     }
     if(y < 0 || y > 7){
         return -1;
     }
-    //check if ship already at x, y
+    /*check if ship already at x, y*/
     unsigned long long int mask = xy_to_bitval(x,y);
     unsigned long long int location = player->ships;
     if(mask & player->ships){
         return -1;
     }
 
-    //flip players ship bit to 1
+    /*flip players ship bit to 1*/
     player->ships = player->ships | mask;
 
-    //recusrivley call add_ship_horizontal(manipulate x and y , decrease length by 1)
-    //base case is when length = 0
+    /*recusrivley call add_ship_vertical(manipulate x and y , decrease length by 1)
+    base case is when length = 0*/
     add_ship_vertical(player, x, y+1, length-1);
 }
