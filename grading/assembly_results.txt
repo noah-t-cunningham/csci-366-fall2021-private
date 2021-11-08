@@ -1,0 +1,8 @@
+3,7c3
+< Error in /home/carson/Projects/msu/csci-366-fall2021/grading/scripts/repos/noah_cunningham/assembly/tmp.mips line 2 column 1: "-" is not a recognized operator
+< Error in /home/carson/Projects/msu/csci-366-fall2021/grading/scripts/repos/noah_cunningham/assembly/tmp.mips line 16 column 1: "-" is not a recognized operator
+< Error in /home/carson/Projects/msu/csci-366-fall2021/grading/scripts/repos/noah_cunningham/assembly/tmp.mips line 17 column 1: "12345678910" is not a recognized operator
+< 
+< Processing terminated due to errors.
+---
+> 12345678910
